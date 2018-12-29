@@ -1,0 +1,263 @@
+
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class New21Hard { //Similar to the Easy one except for the aI
+	static ArrayList<Integer> cards = new ArrayList<Integer>(52);
+	static ArrayList<Integer> currentCards = new ArrayList<Integer>();
+
+	static int playerCardTotal = 0;
+	static int aiCardTotal = 0;
+	static ArrayList<Integer> playerCards = new ArrayList<Integer>();
+	static ArrayList<Integer> aiCards = new ArrayList<Integer>();
+
+	static int playerScore = 0;
+	static int aiScore = 0;
+
+	JLabel label1 = new JLabel();
+	static JLabel label2 = new JLabel();
+	static JLabel label3 = new JLabel();
+	static JLabel label4 = new JLabel();
+	static JButton button1 = new JButton("Hit");
+	static JButton button2 = new JButton("Stand");
+	static JButton button3 = new JButton("Next Round");
+	JButton button4 = new JButton("End");
+	JFrame frame = new JFrame("New 21 Hard");
+
+	public New21Hard() {
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(700, 300);
+		frame.setLayout(new GridLayout(8, 1));
+		frame.getContentPane().setBackground(Color.RED);
+
+		label1.setText("Try to beat your SMARTER opponent without going over 21. Busts lose 1 point. Wins gain 1 point");
+		label1.setHorizontalTextPosition(JLabel.CENTER);
+		label1.setHorizontalAlignment(JLabel.CENTER);
+
+		label2.setText("");
+		label2.setHorizontalTextPosition(JLabel.CENTER);
+		label2.setHorizontalAlignment(JLabel.CENTER);
+
+		label3.setText("");
+		label3.setHorizontalTextPosition(JLabel.CENTER);
+		label3.setHorizontalAlignment(JLabel.CENTER);
+
+		label4.setText("Make your move");
+		label4.setHorizontalTextPosition(JLabel.CENTER);
+		label4.setHorizontalAlignment(JLabel.CENTER);
+
+		frame.add(label1);
+		frame.add(label2);
+		frame.add(label3);
+		frame.add(label4);
+		frame.add(button1);
+		frame.add(button2);
+		frame.add(button3);
+		frame.add(button4);
+		frame.setVisible(true);
+
+		startGame();
+
+		button1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Random randomNum = new Random();
+				int cardSpot = randomNum.nextInt(currentCards.size());
+				playerCards.add(currentCards.get(cardSpot));
+				updateCardScore("Player");
+				currentCards.remove(cardSpot);
+				label2.setText("Your Card Score: " + playerCardTotal + ". Your Cards: " + playerCards
+						+ ". Your Overall Score: " + playerScore);
+				if (playerCardTotal > 21) {
+					playerCardTotal = -1;
+					playerScore--;
+
+					smartAI();
+					result();
+				} else if (playerCardTotal == 21) {
+
+					smartAI();
+					result();
+				}
+
+			}
+
+		});
+
+		button2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				smartAI();
+				result();
+			}
+
+		});
+
+		button3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nextGame();
+			}
+
+		});
+
+		button4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int finalScore = playerScore - aiScore;
+				HighScoresHard scores = new HighScoresHard();
+				try {
+					scores.addScore(finalScore);
+				} catch (ClassNotFoundException | IOException e1) {
+					e1.printStackTrace();
+				}
+				try {
+					scores.HighScoreBox();
+				} catch (ClassNotFoundException | IOException | InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				frame.dispose();
+			}
+
+		});
+	}
+
+	static void startGame() {
+		button3.setEnabled(false);
+		setOriginalCards();
+		resetCards();
+		distributeCards();
+		label2.setText("Your Card Score: " + playerCardTotal + ". Your Cards: " + playerCards + ". Your Overall Score: "
+				+ playerScore);
+		label3.setText("AI Card Score " + aiCardTotal + ". AI Cards: " + aiCards + ". AI Overall Score: " + aiScore);
+
+	}
+
+	static void nextGame() {
+		button3.setEnabled(false);
+		button1.setEnabled(true);
+		button2.setEnabled(true);
+		if (currentCards.size() <= 10) {
+			resetCards();
+		}
+		distributeCards();
+		label2.setText("Your Card Score: " + playerCardTotal + ". Your Cards: " + playerCards + ". Your Overall Score: "
+				+ playerScore);
+		label3.setText("AI Card Score " + aiCardTotal + ". AI Cards: " + aiCards + ". AI Overall Score: " + aiScore);
+		label4.setText("Make your move");
+	}
+
+	static void setOriginalCards() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 1; j < 14; j++) {
+				if (j == 11 || j == 12 || j == 13) {
+					cards.add(10);
+				} else {
+					cards.add(j);
+				}
+			}
+		}
+	}
+
+	static void resetCards() {
+		currentCards.clear();
+		for (int i = 0; i < 52; i++) {
+			currentCards.add(cards.get(i));
+		}
+	}
+
+	static void updateCardScore(String turn) {
+		if (turn.equals("Player")) {
+			playerCardTotal = 0;
+			for (int i = 0; i < playerCards.size(); i++) {
+				playerCardTotal += playerCards.get(i);
+			}
+		} else {
+			aiCardTotal = 0;
+			for (int i = 0; i < aiCards.size(); i++) {
+				aiCardTotal += aiCards.get(i);
+			}
+		}
+	}
+
+	static void distributeCards() {
+		playerCards.clear();
+		playerCardTotal = 0;
+		aiCards.clear();
+		aiCardTotal = 0;
+		Random randomNum = new Random();
+		int cardSpot = randomNum.nextInt(currentCards.size());
+		playerCards.add(currentCards.get(cardSpot));
+		playerCardTotal = playerCards.get(0);
+		currentCards.remove(cardSpot);
+		cardSpot = randomNum.nextInt(currentCards.size());
+		aiCards.add(currentCards.get(cardSpot));
+		aiCardTotal = aiCards.get(0);
+		currentCards.remove(cardSpot);
+
+	}
+
+	public static void result() {
+		if (playerCardTotal > aiCardTotal) {
+			label4.setText("Player Wins");
+			playerScore++;
+		} else if (playerCardTotal < aiCardTotal) {
+			label4.setText("AI wins!");
+			aiScore++;
+		} else {
+			label4.setText("Tie!");
+		}
+		label2.setText("Your Card Score: " + playerCardTotal + ". Your Cards: " + playerCards + ". Your Overall Score: "
+				+ playerScore);
+		label3.setText("AI Card Score " + aiCardTotal + ". AI Cards: " + aiCards + ". AI Overall Score: " + aiScore);
+		button3.setEnabled(true);
+		
+	}
+
+	public static void smartAI() { //This AI was never designed to be perfect. If it was a perfect AI, it would be considered cheating.
+		button1.setEnabled(false);
+		button2.setEnabled(false);
+		int howManyAway; //This is how much is left to get to 21
+		while (true) {
+			double favorTotal = 0; //This is how many cards would favor the AI. 
+			if (aiCardTotal > playerCardTotal) {
+				break;
+			}
+			howManyAway = 21 - aiCardTotal;
+			for (int i = 0; i < currentCards.size(); i++) {
+				if (currentCards.get(i) <= howManyAway) {
+					favorTotal++;
+				}
+			}
+			//The PrintLn methods are just in case someone was curious to see how the AI is calculating the stuff.
+			System.out.println("FavorTotal= " + favorTotal);
+			System.out.println("Size of the Cards= " + currentCards.size());
+			double favorProb = favorTotal / (double) currentCards.size(); //The probability that the next hit is favorable 
+			System.out.println("Percent in favor: " + favorProb);
+			if (favorProb >= .55) { //I experimented with different percentages and decided to do .55 because of the initial results when testing. It was originally .90 and
+				//I put it down to .55 after testing. 
+				Random randomNum = new Random();
+				int cardSpot = randomNum.nextInt(currentCards.size());
+				aiCards.add(currentCards.get(cardSpot));
+				updateCardScore("AI");
+				currentCards.remove(cardSpot);
+			} else {
+				break;
+			}
+			if (aiCardTotal > 21) {
+				aiCardTotal = -1;
+				aiScore--;
+				break;
+			} else if (aiCardTotal == 21) {
+				break;
+			}
+
+		}
+	}
+
+}
