@@ -2,7 +2,6 @@
 
 To download these files, unzip the file and play the game from the folder in the Jar Executable. The score files must be kept in there. 
 
-
 These are the Projects that I have worked on during College:
 
 Guess My Number Game:
