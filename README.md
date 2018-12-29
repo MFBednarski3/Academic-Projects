@@ -2,9 +2,6 @@
 
 To download these files, unzip the file and play the game from the folder in the Jar Executable. The score files must be kept in there. 
 
-To avoid my code from being copied, if you would like to request to see the code that made the applications possible, please contact me at mfbednarski@rocketmail.com and I will get it sent as soon as possible. 
-
-
 
 These are the Projects that I have worked on during College:
 
