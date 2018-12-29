@@ -1,0 +1,108 @@
+/**
+ * The main menu for the Guess My Number Game. Purpose is to keep the game running without stopping
+ */
+
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+
+
+public class GuessMyNumberGameMenu {
+	// Basic Swing components for the menu
+	JLabel titleLabel = new JLabel("Guess My Number Game!");
+	JLabel author = new JLabel("by Mike Bednarski");
+	JLabel choose = new JLabel("Choose your difficulty");
+	JButton easy = new JButton("Easy (1-10)");
+	JButton normal = new JButton("Normal (1-100)"); 
+	JButton hard = new JButton("Hard (1-1000)"); 
+	JButton exit = new JButton("Exit");
+	JFrame menu = new JFrame("Guess My Number Game");
+	
+	
+	public GuessMyNumberGameMenu(){
+		menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // This code indicates that the program will stop after it is closed
+		menu.setSize(400, 400);
+		menu.setLayout(new GridLayout(7,1)); // GridLayout was the only one that seemed to be easy for me
+		menu.getContentPane().setBackground(Color.BLACK); //Setting the whole background to black for design
+		
+		titleLabel.setHorizontalTextPosition(JLabel.CENTER); //This will set the label to the center
+		titleLabel.setHorizontalAlignment(JLabel.CENTER);
+		titleLabel.setForeground(Color.WHITE); //Setting foreground to white since the default is black and black on a 
+		//black background will cause the text not to be seen.
+		
+		author.setHorizontalTextPosition(JLabel.CENTER);
+		author.setHorizontalAlignment(JLabel.CENTER);
+		author.setForeground(Color.WHITE);
+		
+		choose.setHorizontalTextPosition(JLabel.CENTER);
+		choose.setHorizontalAlignment(JLabel.CENTER);
+		choose.setForeground(Color.WHITE);
+		
+		//We add the compartments in
+		menu.add(titleLabel);
+		menu.add(author);
+		menu.add(choose);
+		
+		easy.setForeground(Color.GREEN); //For design purposes, I made the text color green for easy. 
+		menu.add(easy);
+		
+		normal.setForeground(Color.ORANGE); //Normal for Orange
+		menu.add(normal);
+		
+		hard.setForeground(Color.RED); //Hard for red
+		menu.add(hard);
+		menu.add(exit);
+		
+		menu.setVisible(true); //We make the menu visible
+		
+		//The ActionListener is used to indicate the action taken when the button is clicked
+		easy.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				//We create an object of the difficulty that was pressed. This passes to the game difficulty class
+				GuessMyNumberGameEasy gmnge = new GuessMyNumberGameEasy();
+			}
+			
+		});
+		
+		normal.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				GuessMyNumberGameNormal gmngn = new GuessMyNumberGameNormal();
+			}
+			
+		});
+		
+		
+		hard.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				GuessMyNumberGameHard gmngh = new GuessMyNumberGameHard();
+			}
+			
+		});
+		
+		exit.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				//This will stop the program when clicked. 
+				menu.dispose();
+				System.exit(0);
+			}
+			
+		});
+		
+	}
+	
+	public static void main(String[] args) {
+		//This will run the program. I used invokeLater as it doesn't have to add a delay to the start of the program
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				GuessMyNumberGameMenu menu = new GuessMyNumberGameMenu();
+			}
+		});
+	}
+	
+}
