@@ -1,0 +1,21 @@
+
+import java.util.Comparator;
+
+//Same as normal
+public class CompareNormalScores implements Comparator<HighScoresNormal> {
+	public int compare(HighScoresNormal score1, HighScoresNormal score2) {
+		
+		int firstScore = score1.getScore();
+		int secScore = score2.getScore();
+		
+		if (firstScore > secScore){
+			return -1;
+		}
+		else if (firstScore < secScore){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
+}
