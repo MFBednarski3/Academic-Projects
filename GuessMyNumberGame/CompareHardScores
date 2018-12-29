@@ -1,0 +1,21 @@
+
+import java.util.Comparator;
+
+//Same as easy and normal
+public class CompareHardScores implements Comparator<HighScoresHard> {
+	public int compare(HighScoresHard score1, HighScoresHard score2) {
+		
+		int firstScore = score1.getScore();
+		int secScore = score2.getScore();
+		
+		if (firstScore > secScore){
+			return -1;
+		}
+		else if (firstScore < secScore){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
+}
