@@ -1,0 +1,131 @@
+
+// Some of the code has been recycled from the guess my number game as the functionality is very similar. Some of the comments are also recycled
+
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+
+public class New21Menu {
+	// Basic Swing components for the menu
+		JLabel titleLabel = new JLabel("New 21");
+		JLabel author = new JLabel("by Mike Bednarski");
+		JLabel choose = new JLabel("Choose your difficulty");
+		JButton easy = new JButton("Easy");
+		JButton hard = new JButton("Hard"); 
+		JButton highScoresEasy = new JButton("Easy High Scores");
+		JButton highScoresHard = new JButton("Hard High Scores");
+		JButton exit = new JButton("Exit");
+		JFrame menu = new JFrame("New 21");
+		
+		public New21Menu(){
+			menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // This code indicates that the program will stop after it is closed
+			menu.setSize(400, 400);
+			menu.setLayout(new GridLayout(9,1)); // GridLayout was the only one that seemed to be easy for me
+			menu.getContentPane().setBackground(new Color(0, 0, 128)); //Setting the whole background to navy blue since it is better than black
+			
+			titleLabel.setHorizontalTextPosition(JLabel.CENTER); //This will set the label to the center
+			titleLabel.setHorizontalAlignment(JLabel.CENTER);
+			titleLabel.setForeground(Color.WHITE); //Setting foreground to white since the default is black and black on a 
+			//black background will cause the text not to be seen.
+			
+			author.setHorizontalTextPosition(JLabel.CENTER);
+			author.setHorizontalAlignment(JLabel.CENTER);
+			author.setForeground(Color.WHITE);
+			
+			choose.setHorizontalTextPosition(JLabel.CENTER);
+			choose.setHorizontalAlignment(JLabel.CENTER);
+			choose.setForeground(Color.WHITE);
+			
+			//We add the compartments in
+			menu.add(titleLabel);
+			menu.add(author);
+			menu.add(choose);
+			
+			easy.setForeground(new Color(0, 128, 0)); //For design purposes, I made the text color a dark green
+			menu.add(easy);
+			
+			highScoresEasy.setForeground(new Color(0, 128, 0));
+			menu.add(highScoresEasy);
+			
+			hard.setForeground(Color.RED); //Hard for red
+			menu.add(hard);
+			
+			highScoresHard.setForeground(Color.RED);
+			menu.add(highScoresHard);
+			
+			menu.add(exit);
+			
+			menu.setVisible(true); //We make the menu visible
+			
+			//The ActionListener is used to indicate the action taken when the button is clicked
+			easy.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					//We create an object of the difficulty that was pressed. This passes to the game difficulty class
+					New21Easy n21e = new New21Easy();
+				}
+				
+			});
+			
+			
+			hard.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					New21Hard n21h = new New21Hard();
+				}
+				
+			});
+			
+			highScoresEasy.addActionListener(new ActionListener(){  //This is to post the High Scores without having to play. 
+				public void actionPerformed(ActionEvent e) {
+					HighScoresEasy scores = new HighScoresEasy();
+					try { //Due to some conditions, try catch blocks had to be added.
+						scores.showHighScoreBox();
+					} catch (ClassNotFoundException | IOException | InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
+			});
+			
+			highScoresHard.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					HighScoresHard scores = new HighScoresHard();
+					try {
+						scores.showHighScoreBox();
+					} catch (ClassNotFoundException | IOException | InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
+			});
+			
+						
+			exit.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					//This will stop the program when clicked. 
+					menu.dispose();
+					System.exit(0);
+				}
+				
+			});
+			
+		}
+		
+		public static void main(String[] args) {
+			//This will run the program. I used invokeLater as it doesn't have to add a delay to the start of the program
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					New21Menu menu = new New21Menu();
+				}
+			});
+		}
+		}
+
